@@ -12,7 +12,7 @@ Architecture summary
 --------------------
     fit()
         ┌──────────────┐     ┌────────────────┐     ┌───────────────┐
-        │  Train images│────▶│ WideResNet-50  │────▶│  All patches  │
+        │  Train images│────▶│ WideResNet-50  │────▶│  All patches │
         │  (normal)    │     │ layer2 + layer3│     │  (N × 1536-d) │
         └──────────────┘     └────────────────┘     └──────┬────────┘
                                                            │ greedy coreset
@@ -22,7 +22,7 @@ Architecture summary
                                                     └───────────────┘
     predict()
         ┌──────────────┐     ┌────────────────┐     ┌───────────────┐
-        │  Test image  │────▶│ WideResNet-50  │────▶│ Patch scores  │
+        │  Test image  │────▶│ WideResNet-50  │────▶│ Patch scores │
         └──────────────┘     └────────────────┘     │ (k-NN dist)   │
                                                     └──────┬────────┘
                                                            │ upsample + smooth
