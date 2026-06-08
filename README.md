@@ -99,25 +99,26 @@ PatchCore requires no gradient updates. The memory bank is constructed in a sing
 
 ```
 fit()
- ┌─────────────┐    ┌────────────────────┐    ┌──────────────────┐
- │ Train images│───▶│  WideResNet-50     │───▶│  All patches     │
- │ (normal)    │    │  layer2 + layer3   │    │  (N × 1536-d)    │
- └─────────────┘    └────────────────────┘    └────────┬─────────┘
-                                                        │ greedy coreset (1%)
-                                               ┌────────▼─────────┐
-                                               │  Memory bank     │
-                                               │  FAISS IndexL2   │
-                                               └──────────────────┘
+  ┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
+  │  Normal images   │ ──> │  WideResNet-50   │ ──> │  Patch embeddings│
+  │  (train only)    │     │  layer2 + layer3 │     │  N × 1536-d      │
+  └──────────────────┘     └──────────────────┘     └────────┬─────────┘
+                                                             │ greedy coreset (1%)
+                                                    ┌────────▼─────────┐
+                                                    │  Memory bank     │
+                                                    │  FAISS IndexL2   │
+                                                    └──────────────────┘
+
 predict()
- ┌─────────────┐    ┌────────────────────┐    ┌──────────────────┐
- │ Test image  │───▶│  WideResNet-50     │───▶│  k-NN distance   │
- └─────────────┘    └────────────────────┘    │  per patch       │
-                                               └────────┬─────────┘
-                                                        │ upsample + smooth
-                                               ┌────────▼─────────┐
-                                               │  Anomaly heatmap │
-                                               │  (H × W)         │
-                                               └──────────────────┘
+  ┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
+  │  Test image      │ ──> │  WideResNet-50   │ ──> │  k-NN distances  │
+  │  (3 × H × W)     │     │  layer2 + layer3 │     │  per patch       │
+  └──────────────────┘     └──────────────────┘     └────────┬─────────┘
+                                                             │ upsample + Gaussian blur
+                                                    ┌────────▼─────────┐
+                                                    │  Anomaly heatmap │
+                                                    │  H × W           │
+                                                    └──────────────────┘
 ```
 
 **Key design choices:**
@@ -131,10 +132,9 @@ predict()
 A symmetric encoder-decoder trained end-to-end on defect-free images using MSE reconstruction loss. The anomaly heatmap is the per-pixel squared reconstruction error.
 
 ```
-Encoder:  (3,224,224) → (64,112,112) → (128,56,56) → (256,28,28)
-                      → (512,14,14)  → (512,7,7)   ← bottleneck
-Decoder:  (512,7,7)  → (512,14,14)  → (256,28,28) → (128,56,56)
-                      → (64,112,112) → (3,224,224)
+Encoder: (3,224,224) → (64,112,112) → (128,56,56) → (256,28,28) → (512,14,14) → (512,7,7) ← bottleneck
+
+Decoder: (512,7,7) → (512,14,14) → (256,28,28) → (128,56,56) → (64,112,112) → (3,224,224)
 ```
 
 Training uses Adam (lr=2×10⁻⁴), cosine annealing, and early stopping (patience=20) on a 90/10 train/validation split. ~12M parameters.
