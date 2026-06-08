@@ -1,0 +1,53 @@
+name: anomaly-det
+channels:
+  - pytorch        # for faiss-cpu — still the canonical source
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.14
+
+  # ── Scientific stack ───────────────────────────────────────────────────────
+  - numpy>=2.1
+  - scipy>=1.14          # Gaussian smoothing for anomaly maps
+  - scikit-learn>=1.5    # AUROC, ROC curve
+  - scikit-image>=0.24   # Morphological ops, image metrics
+
+  # ── Image I/O & visualisation ──────────────────────────────────────────────
+  - pillow>=11.0
+  - matplotlib>=3.9
+  - pandas>=2.2          # Results tables / CSV export
+
+  # ── Utilities ──────────────────────────────────────────────────────────────
+  - tqdm>=4.66
+  - pyyaml>=6.0
+  - einops>=0.8          # Clean tensor reshaping for patch extraction
+
+  # ── Approximate nearest-neighbour search ───────────────────────────────────
+  # PyTorch channel is the canonical source for faiss; pip builds lag on CUDA.
+  # Swap for faiss-gpu if you have spare VRAM and want faster inference.
+  - pytorch::faiss-cpu>=1.9
+
+  # ── Notebook support ───────────────────────────────────────────────────────
+  - jupyter>=1.0
+  - ipykernel>=6.29
+  - ipywidgets>=8.0
+
+  # ── Dev / testing / linting ────────────────────────────────────────────────
+  - pytest>=8.0
+  - pytest-cov>=5.0
+  - black>=24.0
+  - ruff>=0.6
+  - isort>=5.13
+
+  # ── PyTorch via pip ────────────────────────────────────────────────────────
+  # Conda's pytorch channel doesn't yet have 3.14 wheels; pip does (2.12+).
+  # Adjust the index URL for your CUDA version:
+  #   CUDA 12.8  →  https://download.pytorch.org/whl/cu128   (default below)
+  #   CUDA 12.4  →  https://download.pytorch.org/whl/cu124
+  #   CUDA 11.8  →  https://download.pytorch.org/whl/cu118
+  #   CPU only   →  https://download.pytorch.org/whl/cpu
+  - pip>=24.0
+  - pip:
+    - --index-url https://download.pytorch.org/whl/cu128
+    - torch>=2.12
+    - torchvision>=0.20

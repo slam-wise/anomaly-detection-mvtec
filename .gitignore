@@ -1,0 +1,57 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.installed.cfg
+
+# ── Virtual environments ───────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+.conda/
+
+# ── Jupyter ───────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb~
+
+# ── Data ──────────────────────────────────────────────────────────────────────
+# MVTec AD is ~5 GB — do NOT commit it
+data/mvtec/
+
+# ── Results (generated artefacts) ─────────────────────────────────────────────
+# Commit the directory skeleton but not generated files
+results/figures/*.png
+results/figures/*.pdf
+results/metrics/*.json
+results/metrics/*.csv
+# Exception: commit any pre-selected README figures explicitly
+!results/figures/.gitkeep
+!results/metrics/.gitkeep
+
+# ── Model checkpoints ─────────────────────────────────────────────────────────
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+
+# ── Linting / tooling caches ──────────────────────────────────────────────────
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# ── IDEs ──────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db

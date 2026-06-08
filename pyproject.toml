@@ -1,0 +1,100 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+# ── Project metadata ──────────────────────────────────────────────────────────
+[project]
+name = "anomaly-det"
+version = "0.1.0"
+description = "Unsupervised industrial anomaly detection on MVTec AD — PatchCore + autoencoder benchmark"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.14"
+authors = [
+  { name = "slam-wise", url = "https://github.com/slam-wise" },
+]
+keywords = [
+  "anomaly-detection",
+  "computer-vision",
+  "mvtec",
+  "patchcore",
+  "defect-detection",
+  "industrial-inspection",
+  "ndt",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Scientific/Engineering :: Image Recognition",
+  "Programming Language :: Python :: 3.14",
+  "License :: OSI Approved :: MIT License",
+]
+
+# Runtime deps are managed via conda (environment.yml).
+# Keeping this empty avoids pip/conda resolver conflicts.
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "pytest-cov>=5.0",
+  "black>=24.0",
+  "ruff>=0.4",
+  "isort>=5.13",
+]
+
+[project.urls]
+Homepage   = "https://github.com/slam-wise/anomaly-detection-mvtec"
+Repository = "https://github.com/slam-wise/anomaly-detection-mvtec"
+Issues     = "https://github.com/slam-wise/anomaly-detection-mvtec/issues"
+
+# CLI entry points — uncommented as each script is finalised
+# [project.scripts]
+# anomaly-train = "anomaly_det.pipelines.fit:main"
+# anomaly-eval  = "anomaly_det.pipelines.evaluate:main"
+# anomaly-bench = "anomaly_det.pipelines.benchmark:main"
+
+# ── Package discovery (src layout) ────────────────────────────────────────────
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# ── Black ─────────────────────────────────────────────────────────────────────
+[tool.black]
+line-length    = 100
+target-version = ["py314"]
+include        = '\.pyi?$'
+
+# ── Ruff ──────────────────────────────────────────────────────────────────────
+[tool.ruff]
+line-length    = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+select = [
+  "E",   # pycodestyle errors
+  "W",   # pycodestyle warnings
+  "F",   # pyflakes
+  "I",   # isort
+  "N",   # pep8-naming
+  "UP",  # pyupgrade
+  "B",   # flake8-bugbear
+]
+ignore = [
+  "E501",  # line length — black handles this
+  "N803",  # matrix-style variable names (X, X_train) are standard in ML
+  "N806",  # same — uppercase in functions is fine for arrays
+]
+
+# ── isort ─────────────────────────────────────────────────────────────────────
+[tool.isort]
+profile     = "black"
+line_length = 100
+
+# ── pytest ────────────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+testpaths        = ["tests"]
+python_files     = ["test_*.py"]
+python_classes   = ["Test*"]
+python_functions = ["test_*"]
+addopts          = "-v --tb=short"
