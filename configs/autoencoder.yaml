@@ -1,0 +1,31 @@
+# Autoencoder configuration
+# Reconstruction-based anomaly detection baseline.
+#
+# The autoencoder trades PatchCore's pretrained-feature approach for an
+# explicitly trained pixel-space reconstruction model. Lower AUROC numbers
+# are expected — the comparison demonstrates why pretrained features matter.
+
+model:
+  base_channels: 64                # channel multiplier; 64 → ~12M parameters
+  smooth_sigma: 4.0                # Gaussian blur sigma applied to residual map
+
+training:
+  epochs: 200                      # maximum training epochs (early stopping may fire earlier)
+  learning_rate: 2.0e-4            # Adam initial learning rate
+  weight_decay: 1.0e-5             # Adam L2 regularisation
+  val_split: 0.1                   # fraction of training images held out for early stopping
+  patience: 20                     # early stopping patience (epochs without val loss improvement)
+  lr_min_ratio: 0.01               # cosine annealing final lr = lr * lr_min_ratio
+
+data:
+  image_size: 224
+  batch_size: 32
+  num_workers: 0
+
+benchmark:
+  categories:
+    - bottle
+    - cable
+    - hazelnut
+    - leather
+    - screw

@@ -1,0 +1,26 @@
+# PatchCore configuration
+# Reference: Roth et al., "Towards Total Recall in Industrial Anomaly Detection", CVPR 2022
+#
+# These are the defaults used in the benchmark. Pass --coreset-ratio / --image-size
+# to scripts/run_benchmark.py to override from the command line.
+
+model:
+  backbone: wide_resnet50_2        # torchvision backbone name
+  layers: [layer2, layer3]         # hooked layers — layer2 (512-d) + layer3 (1024-d) = 1536-d patches
+  coreset_ratio: 0.01              # fraction of patches to keep in memory bank (1%)
+  k_neighbors: 1                   # nearest neighbours for anomaly scoring
+  patch_size: 28                   # spatial patch grid resolution (matches layer2 at 224px input)
+  smooth_sigma: 4.0                # Gaussian blur sigma applied to anomaly map
+
+data:
+  image_size: 224                  # input resolution fed to backbone
+  batch_size: 32
+  num_workers: 0                   # set >0 on Linux; keep 0 on Windows
+
+benchmark:
+  categories:                      # 5-category portfolio benchmark
+    - bottle
+    - cable
+    - hazelnut
+    - leather
+    - screw
