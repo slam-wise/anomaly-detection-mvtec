@@ -9,9 +9,9 @@ version = "0.1.0"
 description = "Unsupervised industrial anomaly detection on MVTec AD — PatchCore + autoencoder benchmark"
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.14"
+requires-python = ">=3.13"
 authors = [
-  { name = "slam-wise", url = "https://github.com/slam-wise" },
+  { name = "slam-wise" },
 ]
 keywords = [
   "anomaly-detection",
@@ -27,7 +27,7 @@ classifiers = [
   "Intended Audience :: Science/Research",
   "Topic :: Scientific/Engineering :: Artificial Intelligence",
   "Topic :: Scientific/Engineering :: Image Recognition",
-  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.13",
   "License :: OSI Approved :: MIT License",
 ]
 
@@ -62,13 +62,13 @@ where = ["src"]
 # ── Black ─────────────────────────────────────────────────────────────────────
 [tool.black]
 line-length    = 100
-target-version = ["py314"]
+target-version = ["py313"]
 include        = '\.pyi?$'
 
 # ── Ruff ──────────────────────────────────────────────────────────────────────
 [tool.ruff]
 line-length    = 100
-target-version = "py314"
+target-version = "py313"
 
 [tool.ruff.lint]
 select = [
